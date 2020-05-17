@@ -9,3 +9,11 @@ description = "Stop elasticseaerch"
 script = [
     "docker-compose down"
 ]
+
+[task.example]
+descript = "Run example"
+command = "cargo"
+args = [
+    "run",
+    "--example", "${@}"
+]
