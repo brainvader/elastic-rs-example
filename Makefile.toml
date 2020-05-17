@@ -1,0 +1,11 @@
+[tasks.up]
+description = "Start elasticseaerch"
+script = [
+    "docker-compose up -d"
+]
+
+[tasks.down]
+description = "Stop elasticseaerch"
+script = [
+    "docker-compose down"
+]
