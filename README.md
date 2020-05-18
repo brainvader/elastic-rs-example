@@ -40,3 +40,11 @@ If you no need the es server, you should stop docker instance.
 ```bash
 cargo make down
 ```
+
+## Examples
+
+examples correspond to [Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html) sections.
+
+### ex2-index-document.rs
+
+[Index some documents](https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-index.html)

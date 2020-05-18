@@ -1,5 +1,7 @@
 use serde::Deserialize;
 
+pub mod api;
+
 // Cluster node information
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-nodes.html
 #[derive(Deserialize, Debug)]
