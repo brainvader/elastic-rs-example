@@ -1,14 +1,14 @@
 extern crate elasticsearch_rs_examples as MY;
 
-use elasticsearch::IndexParts;
 use elasticsearch::{http::transport::Transport, Elasticsearch};
+use elasticsearch::{GetParts, IndexParts};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 // use serde_json::json;
 
 use MY::api;
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Customer {
     name: String,
 }
@@ -36,9 +36,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // });
 
     let index_response = customer_index.body(john_doe).send().await?;
-    let success = index_response.status_code().is_success();
-    if success {
+    if index_response.status_code().is_success() {
         let response_body = index_response.json::<api::index::ResponseBody>().await?;
+        println!("{:#?}", response_body);
+    }
+
+    let response = client
+        .get(GetParts::IndexId("customer", "1"))
+        .send()
+        .await?;
+    if response.status_code().is_success() {
+        let response_body: api::get::ResponseBody<Customer> =
+            response.json::<api::get::ResponseBody<Customer>>().await?;
+        // let response_body = response.json::<Value>().await?;
         println!("{:#?}", response_body);
     }
     Ok(())
