@@ -1,5 +1,6 @@
 use serde::Deserialize;
 
+#[derive(Deserialize)]
 pub struct ResponseBody<T> {
     index: String,
     r#type: String,
