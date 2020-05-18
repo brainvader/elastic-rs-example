@@ -10,7 +10,7 @@ script = [
     "docker-compose down"
 ]
 
-[task.example]
+[tasks.example]
 descript = "Run example"
 command = "cargo"
 args = [
