@@ -35,11 +35,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //     "name": "John Doe"
     // });
 
-    let response = customer_index.body(john_doe).send().await?;
-    let success = response.status_code().is_success();
+    let index_response = customer_index.body(john_doe).send().await?;
+    let success = index_response.status_code().is_success();
     if success {
-        let index_response = response.json::<api::index::ResponseBody>().await?;
-        println!("{:#?}", index_response);
+        let response_body = index_response.json::<api::index::ResponseBody>().await?;
+        println!("{:#?}", response_body);
     }
     Ok(())
 }
