@@ -6,7 +6,7 @@ use elasticsearch::{http::transport::Transport, Elasticsearch};
 use serde::Serialize;
 // use serde_json::json;
 
-use MY::IndexResponseBody;
+use MY::api;
 
 #[derive(Serialize)]
 struct Customer {
@@ -38,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let response = customer_index.body(john_doe).send().await?;
     let success = response.status_code().is_success();
     if success {
-        let index_response = response.json::<IndexResponseBody>().await?;
+        let index_response = response.json::<api::index::ResponseBody>().await?;
         println!("{:#?}", index_response);
     }
     Ok(())
