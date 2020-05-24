@@ -10,6 +10,8 @@ use MY::ESNode;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    MY::setup_logger()?;
+
     let transport = Transport::single_node("http://127.0.0.1:9200")?;
     let client = Elasticsearch::new(transport);
     let cat_client = client.cat();
@@ -24,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let response_body: Vec<ESNode> = response.json::<Vec<ESNode>>().await?;
     if let Some(es_node) = response_body.iter().take(1).next() {
-        println!("{:?}", es_node);
+        log::info!("{:#?}", es_node);
     }
     Ok(())
 }
