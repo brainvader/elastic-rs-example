@@ -15,7 +15,9 @@ struct Customer {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let transport = Transport::single_node("http://127.0.0.1:9200")?;
+    MY::setup_logger()?;
+    let url = MY::es_url()?;
+    let transport = Transport::single_node(url.as_str())?;
     let client = Elasticsearch::new(transport);
 
     // Rest API version
@@ -38,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let index_response = customer_index.body(&john_doe).send().await?;
     if index_response.status_code().is_success() {
         let response_body = index_response.json::<api::index::ResponseBody>().await?;
-        println!("{:#?}", response_body);
+        log::info!("{:#?}", response_body);
     }
 
     let response = client
@@ -49,7 +51,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let response_body: api::get::ResponseBody<Customer> =
             response.json::<api::get::ResponseBody<Customer>>().await?;
         // let response_body = response.json::<Value>().await?;
-        println!("{:#?}", response_body);
+        log::info!("{:#?}", response_body);
     }
     Ok(())
 }

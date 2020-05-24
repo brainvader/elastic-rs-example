@@ -22,6 +22,8 @@ struct Tweet {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    MY::setup_logger()?;
+
     let date_to_str = |date| format!("{:?}", date);
 
     let bulk_index_1 = api::bulk::request::Action::Index {
@@ -52,7 +54,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         message: "Bulk indexing with the rust client, yeah!".to_owned(),
     };
 
-    let transport = Transport::single_node("http://127.0.0.1:9200")?;
+    let url = MY::es_url()?;
+    let transport = Transport::single_node(url.as_str())?;
     let client: Elasticsearch = Elasticsearch::new(transport);
 
     let mut body: Vec<JsonBody<_>> = Vec::with_capacity(4);
@@ -69,10 +72,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if response.status_code().is_success() {
         let response_body = response.json::<api::bulk::response::ResponseBody>().await?;
-        println!("{:#?}", response_body);
+        log::info!("{:#?}", response_body);
     } else {
         let response_body = response.text().await?;
-        println!("{}", response_body);
+        log::info!("{}", response_body);
     }
     Ok(())
 }
