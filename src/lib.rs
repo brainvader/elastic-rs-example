@@ -5,6 +5,7 @@ pub mod api;
 use std::io::Write;
 
 use env_logger::{DEFAULT_FILTER_ENV, DEFAULT_WRITE_STYLE_ENV};
+use url::{ParseError, Url};
 
 // Cluster node information
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-nodes.html
@@ -35,4 +36,16 @@ pub fn setup_logger() -> dotenv::Result<()> {
         // .write_style(env_logger::WriteStyle::Auto)
         .init();
     Ok(())
+}
+
+const ES_HOST: &'static str = "ES_HOST";
+const ES_PORT: &'static str = "ES_PORT";
+
+pub fn es_url() -> std::result::Result<Url, ParseError> {
+    let schema = "http";
+    let host: String = dotenv::var(ES_HOST).expect("Host could not resolved");
+    let port = dotenv::var(ES_PORT).expect("Port could not resolved");
+    let url_str = format!("{}://{}:{}", schema, host, port);
+    let url = Url::parse(&url_str)?;
+    Ok(url)
 }
