@@ -54,7 +54,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         message: "Bulk indexing with the rust client, yeah!".to_owned(),
     };
 
-    let transport = Transport::single_node("http://127.0.0.1:9200")?;
+    let url = MY::es_url()?;
+    let transport = Transport::single_node(url.as_str())?;
     let client: Elasticsearch = Elasticsearch::new(transport);
 
     let mut body: Vec<JsonBody<_>> = Vec::with_capacity(4);
