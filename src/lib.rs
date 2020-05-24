@@ -4,6 +4,8 @@ pub mod api;
 
 use std::io::Write;
 
+use env_logger::{DEFAULT_FILTER_ENV, DEFAULT_WRITE_STYLE_ENV};
+
 // Cluster node information
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-nodes.html
 #[derive(Deserialize, Debug)]
@@ -15,14 +17,11 @@ pub struct ESNode {
     name: String,
 }
 
-pub const RUST_LOG: &'static str = "RUST_LOG";
-pub const RUST_LOG_STYLE: &'static str = "RUST_LOG_STYLE";
-
 pub fn setup_logger() -> dotenv::Result<()> {
-    let log_level: String = dotenv::var(RUST_LOG)?;
-    let log_style: String = dotenv::var(RUST_LOG_STYLE)?;
-    std::env::set_var(RUST_LOG, log_level);
-    std::env::set_var(RUST_LOG_STYLE, log_style);
+    let log_level: String = dotenv::var(DEFAULT_FILTER_ENV)?;
+    let log_style: String = dotenv::var(DEFAULT_WRITE_STYLE_ENV)?;
+    std::env::set_var(DEFAULT_FILTER_ENV, log_level);
+    std::env::set_var(DEFAULT_WRITE_STYLE_ENV, log_style);
     env_logger::builder()
         .target(env_logger::Target::Stdout)
         .format_indent(Some(4))
